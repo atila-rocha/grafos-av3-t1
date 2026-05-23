@@ -21,6 +21,12 @@
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
+
+
+
+
+
+
 public class Edge implements Comparable<Edge> {
 
     private final int id;
@@ -98,9 +104,28 @@ public class Edge implements Comparable<Edge> {
      *         the weight of this is less than, equal to, or greater than the
      *         argument edge
      */
+//    @Override
+//    public int compareTo(Edge that) {
+//        return Double.compare(this.weight, that.weight);
+//    }
+
     @Override
     public int compareTo(Edge that) {
-        return Double.compare(this.weight, that.weight);
+        int cmp = Double.compare(this.weight, that.weight);
+
+        if (cmp != 0) {
+            return cmp;
+        }
+
+        /*
+         * Em caso de empate no peso, damos preferência
+         * para a aresta que já estava na árvore inicial.
+         */
+        if (this.isethan != that.isethan) {
+            return this.isethan ? -1 : 1;
+        }
+
+        return Integer.compare(this.id, that.id);
     }
 
     /**

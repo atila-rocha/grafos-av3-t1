@@ -1,39 +1,137 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-/*
-* Classe statica para comparação
-* TODO: printar aresta de acordo com sua inserção do arquivo txt Ex: aresta 1 ao
-*  invés de aresta 1-2
-* TODO: Descobrir a "aresta que entrou no grafo (Possível alteração nas demais classes)"
-* TODO: Printar output bonitinho
-* */
 public class GraphMSTComparison {
-    public static int printExcludedEdges(EdgeWeightedGraph G, KruskalMST mst) {
-        Set<Edge> mstEdges = new HashSet<>();
+
+    public static List<int[]> findChanges(EdgeWeightedGraph G, KruskalMST mst, List<Edge> edges, int V, int M) {
+        boolean[] inMST = new boolean[M + 1];
+
+        /*
+         * Marca quais arestas fazem parte da MST final.
+         */
         for (Edge e : mst.edges()) {
-            mstEdges.add(e);
+            inMST[e.id()] = true;
         }
-        int V = G.V();
-        for (int v = 0; v < V; v++) {
-            for (Edge e : G.adj(v)) {
-                int other = e.other(v);
-                if (v < other) {
-                    if (!mstEdges.contains(e)) {
-                        return e.id();
-                    }
+
+        boolean[] inCurrentTree = new boolean[M + 1];
+
+        ArrayList<Edge>[] currentAdj = (ArrayList<Edge>[]) new ArrayList[V + 1];
+
+        for (int i = 1; i <= V; i++) {
+            currentAdj[i] = new ArrayList<>();
+        }
+
+        /*
+         * A árvore atual começa com as primeiras V - 1 arestas,
+         * que são a árvore inicial do Ethan.
+         */
+        for (int i = 0; i < V - 1; i++) {
+            Edge e = edges.get(i);
+
+            inCurrentTree[e.id()] = true;
+
+            int v = e.either();
+            int w = e.other(v);
+
+            currentAdj[v].add(e);
+            currentAdj[w].add(e);
+        }
+
+        List<int[]> changes = new ArrayList<>();
+
+        /*
+         * Para cada aresta que deveria estar na MST,
+         * mas ainda não está na árvore atual,
+         * fazemos uma troca.
+         */
+        for (Edge edgeToAdd : mst.edges()) {
+            if (!inCurrentTree[edgeToAdd.id()]) {
+                int edgeToRemove = findEdgeToRemove(
+                        edgeToAdd,
+                        currentAdj,
+                        inCurrentTree,
+                        inMST,
+                        V
+                );
+
+                changes.add(new int[]{edgeToRemove, edgeToAdd.id()});
+
+                inCurrentTree[edgeToRemove] = false;
+                inCurrentTree[edgeToAdd.id()] = true;
+
+                int v = edgeToAdd.either();
+                int w = edgeToAdd.other(v);
+
+                currentAdj[v].add(edgeToAdd);
+                currentAdj[w].add(edgeToAdd);
+            }
+        }
+
+        return changes;
+    }
+
+    private static int findEdgeToRemove(
+            Edge edgeToAdd,
+            ArrayList<Edge>[] currentAdj,
+            boolean[] inCurrentTree,
+            boolean[] inMST,
+            int V
+    ) {
+        int start = edgeToAdd.either();
+        int end = edgeToAdd.other(start);
+
+        int[] parent = new int[V + 1];
+        int[] parentEdge = new int[V + 1];
+        boolean[] visited = new boolean[V + 1];
+
+        Arrays.fill(parent, -1);
+
+        Stack<Integer> stack = new Stack<>();
+
+        stack.push(start);
+        visited[start] = true;
+
+        while (!stack.isEmpty()) {
+            int current = stack.pop();
+
+            if (current == end) {
+                break;
+            }
+
+            for (Edge e : currentAdj[current]) {
+                if (!inCurrentTree[e.id()]) {
+                    continue;
+                }
+
+                int next = e.other(current);
+
+                if (!visited[next]) {
+                    visited[next] = true;
+                    parent[next] = current;
+                    parentEdge[next] = e.id();
+                    stack.push(next);
                 }
             }
         }
-        return -1;
-    }
 
-    public static int findInputvertex(KruskalMST mst){
-        for (Edge e : mst.edges()) {
-            if(!e.isEthan()){
-                return e.id();
+        /*
+         * Ao adicionar edgeToAdd, forma-se um ciclo.
+         * Dentro desse ciclo, precisamos remover uma aresta
+         * que NÃO pertence à MST final.
+         */
+        int vertex = end;
+
+        while (vertex != start) {
+            int edgeId = parentEdge[vertex];
+
+            if (!inMST[edgeId]) {
+                return edgeId;
             }
+
+            vertex = parent[vertex];
         }
+
         return -1;
     }
 }
