@@ -1,15 +1,32 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
 
 public class Main {
 
-    static void main() {
+    public static void main(String[] args) {
         //long startTime = System.nanoTime();
         //String file_path = "dados/input.txt";
         //In in = new In(file_path);
 
-        Scanner sc = new Scanner(System.in);
-
-        EdgeWeightedGraph graph = new EdgeWeightedGraph(sc);
+        Scanner scanner = new Scanner(System.in);
+        int V = scanner.nextInt();
+        int M = scanner.nextInt();
+        List<Edge> edges = new ArrayList<>();
+        for (int i = 0; i < M; i++) {
+            int v = scanner.nextInt();
+            int w = scanner.nextInt();
+            double weight = scanner.nextDouble();
+            boolean isEthan = (i < V - 1);
+            Edge edge = new Edge(i+1, v, w, weight, isEthan);
+            edges.add(edge);
+        }
+        scanner.close();
+        EdgeWeightedGraph graph = new EdgeWeightedGraph(V + 1);
+        for (Edge edge : edges) {
+            graph.addEdge(edge);
+        }
 
 
         //EdgeWeightedGraph graph = new EdgeWeightedGraph(in);
