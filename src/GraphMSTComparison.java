@@ -9,7 +9,7 @@ import java.util.Set;
 * TODO: Printar output bonitinho
 * */
 public class GraphMSTComparison {
-    public static void printExcludedEdges(EdgeWeightedGraph G, KruskalMST mst) {
+    public static int printExcludedEdges(EdgeWeightedGraph G, KruskalMST mst) {
         Set<Edge> mstEdges = new HashSet<>();
         for (Edge e : mst.edges()) {
             mstEdges.add(e);
@@ -20,10 +20,20 @@ public class GraphMSTComparison {
                 int other = e.other(v);
                 if (v < other) {
                     if (!mstEdges.contains(e)) {
-                        System.out.println("Edge " + e + " is excluded from MST.");
+                        return e.id();
                     }
                 }
             }
         }
+        return -1;
+    }
+
+    public static int findInputvertex(KruskalMST mst){
+        for (Edge e : mst.edges()) {
+            if(!e.isEthan()){
+                return e.id();
+            }
+        }
+        return -1;
     }
 }

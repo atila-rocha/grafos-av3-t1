@@ -80,25 +80,6 @@ public class EdgeWeightedGraph {
         }
     }
 
-    /**
-     * Initializes a random edge-weighted graph with {@code V} vertices and <em>E</em> edges.
-     *
-     * @param  V the number of vertices
-     * @param  E the number of edges
-     * @throws IllegalArgumentException if {@code V < 0}
-     * @throws IllegalArgumentException if {@code E < 0}
-     */
-    public EdgeWeightedGraph(int V, int E) {
-        this(V);
-        if (E < 0) throw new IllegalArgumentException("Number of edges must be non-negative");
-        for (int i = 0; i < E; i++) {
-            int v = StdRandom.uniformInt(V);
-            int w = StdRandom.uniformInt(V);
-            double weight = 0.01 * StdRandom.uniformInt(0, 100);
-            Edge e = new Edge(i+1, v, w, weight);
-            addEdge(e);
-        }
-    }
 
     /**
      * Initializes an edge-weighted graph from an input stream.
@@ -130,7 +111,9 @@ public class EdgeWeightedGraph {
                 validateVertex(v);
                 validateVertex(w);
                 double weight = in.readDouble();
-                Edge e = new Edge(i+1, v, w, weight);
+                boolean isethan = true;
+                if (i==(E-1)){isethan = false;}
+                Edge e = new Edge(i+1, v, w, weight, isethan);
                 addEdge(e);
             }
         }
@@ -139,6 +122,7 @@ public class EdgeWeightedGraph {
         }
 
     }
+    
 
     /**
      * Initializes a new edge-weighted graph that is a deep copy of {@code G}.
