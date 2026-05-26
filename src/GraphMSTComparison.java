@@ -81,11 +81,11 @@ public class GraphMSTComparison {
         int start = edgeToAdd.either();
         int end = edgeToAdd.other(start);
 
-        int[] parent = new int[V + 1];
-        int[] parentEdge = new int[V + 1];
+        Edge[] parent = new Edge[V + 1];
+        //int[] parentEdge = new int[V + 1];
         boolean[] visited = new boolean[V + 1];
 
-        Arrays.fill(parent, -1);
+        //Arrays.fill(parent, -1);
 
         Stack<Integer> stack = new Stack<>();
 
@@ -108,8 +108,8 @@ public class GraphMSTComparison {
 
                 if (!visited[next]) {
                     visited[next] = true;
-                    parent[next] = current;
-                    parentEdge[next] = e.id();
+                    parent[next] = e;
+                    //parentEdge[next] = e.id();
                     stack.push(next);
                 }
             }
@@ -123,13 +123,14 @@ public class GraphMSTComparison {
         int vertex = end;
 
         while (vertex != start) {
-            int edgeId = parentEdge[vertex];
+            Edge edge = parent[vertex];
+            int edgeId=edge.id();
 
             if (!inMST[edgeId]) {
                 return edgeId;
             }
 
-            vertex = parent[vertex];
+            vertex = edge.other(vertex);
         }
 
         return -1;
