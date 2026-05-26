@@ -48,4 +48,4 @@ Foi aplicada a **MST com Desempate Lexicográfico**. Ao priorizar arestas origin
 - **Self-loops:** Ignorados naturalmente pelo Union-Find no Kruskal.
 
 ## Comprovação de Sucesso
-![[https://github.com/atila-rocha/grafos-av3-t1/blob/ModVictor/evidencias/accepted.jpeg]]((https://github.com/atila-rocha/grafos-av3-t1/blob/ModVictor/evidencias/accepted.jpeg))
+![https://github.com/atila-rocha/grafos-av3-t1/blob/ModVictor/evidencias/accepted.jpeg](https://github.com/atila-rocha/grafos-av3-t1/blob/ModVictor/evidencias/accepted.jpeg)
