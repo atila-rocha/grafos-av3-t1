@@ -2,19 +2,20 @@
 
 ## Informações Gerais
 - **Link do Problema:** [https://open.kattis.com/problems/brokenminimumspanningtree](https://open.kattis.com/problems/brokenminimumspanningtree)
-- **Integrantes do Grupo:** [Inserir Nomes dos Integrantes]
-- **Linguagem Utilizada:** Java (JDK 11+)
+- **Integrantes do Grupo:** Átila Silvio Carvalho Rocha Melo Oliveira | Victor Menezes Do Vale | Lucas Barroso Sá 
+- **Linguagem Utilizada:** Java (JDK 25+)
 
 ## Como Executar
-1. Certifique-se de que todos os arquivos `.java` estão no mesmo diretório.
+1. Vá a pasta do repositório
 2. Compile o projeto:
    ```bash
-   javac *.java
+   javac -d out src/*.java
    ```
 3. Execute passando o arquivo de entrada:
    ```bash
-   java Main < input.txt
+   java .\src\Main.java
    ```
+4. Use o ``dados/input.txt`` para usar como seu caso-teste e digite no terminal
 
 ## Modelagem do Problema
 O problema foi modelado como um **Grafo Ponderado Não Direcionado** utilizando listas de adjacência. A entidade principal é a classe `Edge`, que armazena:
@@ -38,7 +39,7 @@ As arestas são ordenadas primeiramente pelo peso. Em caso de empate, a aresta q
 Foi aplicada a **MST com Desempate Lexicográfico**. Ao priorizar arestas originais em empates de peso, construímos a MST que possui a maior interseção possível com a árvore inicial.
 
 ## Análise de Complexidade
-- **Tempo:** $O(M \log M + V^2)$. Onde $M \log M$ domina a ordenação e $V^2$ representa o pior caso das trocas com DFS.
+- **Tempo:** $O(M \log M + V^2)$. Onde V é a quantidade de vértices e M é a quantidade de arestas,logo $M \log M$ domina a ordenação e $V^2$ representa o pior caso das trocas com DFS.
 - **Espaço:** $O(V + M)$ para armazenar as listas de adjacência e estruturas auxiliares.
 
 ## Casos Especiais Relevantes
@@ -47,4 +48,4 @@ Foi aplicada a **MST com Desempate Lexicográfico**. Ao priorizar arestas origin
 - **Self-loops:** Ignorados naturalmente pelo Union-Find no Kruskal.
 
 ## Comprovação de Sucesso
-[Link ou Imagem comprovando o status **Accepted** no Kattis]
+[[https://github.com/atila-rocha/grafos-av3-t1/blob/ModVictor/evidencias/accepted.jpeg]]((https://github.com/atila-rocha/grafos-av3-t1/blob/ModVictor/evidencias/accepted.jpeg))
